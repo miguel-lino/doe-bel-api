@@ -39,7 +39,7 @@ exports.getAll = async (req, res) => {
           //search query with our [searchId] value
           "pipeline":[
             //searching [searchId] value equals your field [_id]
-            {"$match": {"$expr":[ {"_id": "$$searchId"}]}}
+            {"$match": { "$expr": { $eq: [ "$_id", "$$searchId" ] }}}
           ],
           'as': 'usuarios'
         }
@@ -65,8 +65,10 @@ exports.getAll = async (req, res) => {
 
     // Retira informações sensíveis do usuário que não são pertinentes no Anúncio
     anuncios.forEach(element => {
+        delete element._id;   // id do usuário
         delete element.username;
         delete element.password;
+        delete element.item_usuario; // id do usuário
       });
 
     // Filtra itens marcados como "doados"
